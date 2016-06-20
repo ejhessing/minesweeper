@@ -22,7 +22,7 @@ function startGame () {
 function showCell (evt) {
   showSurrounding(evt.target);
   evt.target.classList.remove('hidden');
-
+  checkForWin();
 }
 
 
@@ -34,10 +34,10 @@ function markCell (evt) {
   //add isMarked to the cells object
   for(var i =0; i<board.cells.length;i++){
   	if(board.cells[i].row === getRow(evt.target) && board.cells[i].col === getCol(evt.target)){
-  		console.log(board.cells[i]);
   		board.cells[i].isMarked = true;
   	}
   }
+  checkForWin();
 }
 
 function getRow (elements) {
@@ -77,4 +77,27 @@ function countSurroundingMines (cell) {
 		}
 	}
 	return num;
+}
+
+
+function checkForWin() {
+	var num = 0;
+	var mineField = document.getElementsByClassName('board')[0].children;
+  for (var i = 0; i<board.cells.length; i++) {
+  	if(board.cells[i].isMine === true && board.cells[i].isMarked === true){
+  		num++;
+  	}
+  }
+
+  if (num === 5) {
+	  for (var i = 0; i<mineField.length; i++) {
+	  	if (mineField[i].classList.contains('hidden')) {
+	  		return;
+	  	}
+	  }
+	  alert("You Have Won!");
+  } else {
+  	return;
+  }
+
 }
