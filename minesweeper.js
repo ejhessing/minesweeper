@@ -20,15 +20,24 @@ function startGame () {
 
 
 function showCell (evt) {
-  evt.target.classList.remove('hidden');
   showSurrounding(evt.target);
+  evt.target.classList.remove('hidden');
+
 }
 
 
 function markCell (evt) {
   evt.preventDefault();
   evt.target.classList.toggle('marked');
-  // evt.target.classList.toggle('hidden');
+  evt.target.classList.toggle('hidden');
+
+  //add isMarked to the cells object
+  for(var i =0; i<board.cells.length;i++){
+  	if(board.cells[i].row === getRow(evt.target) && board.cells[i].col === getCol(evt.target)){
+  		console.log(board.cells[i]);
+  		board.cells[i].isMarked = true;
+  	}
+  }
 }
 
 function getRow (elements) {
