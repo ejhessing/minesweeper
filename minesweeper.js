@@ -4,9 +4,9 @@ var board = {
 };
 
 
-function startGame () {
-  var mineField = document.getElementsByClassName('board')[0].children;
 
+function startGame () {
+var mineField = document.getElementsByClassName('board')[0].children;
   for(var i = 0; i < mineField.length; i++) {
     mineField[i].addEventListener('click',showCell);
     mineField[i].addEventListener('contextmenu',markCell);
@@ -20,6 +20,11 @@ function startGame () {
 
 
 function showCell (evt) {
+  if(evt.target.classList.contains('mine')){
+    showAllMines();
+    alert("Sorry you lost!");
+  }
+
   showSurrounding(evt.target);
   evt.target.classList.remove('hidden');
   checkForWin();
@@ -80,9 +85,9 @@ function countSurroundingMines (cell) {
 }
 
 
-function checkForWin() {
+function checkForWin () {
 	var num = 0;
-	var mineField = document.getElementsByClassName('board')[0].children;
+var mineField = document.getElementsByClassName('board')[0].children;
   for (var i = 0; i<board.cells.length; i++) {
   	if(board.cells[i].isMine === true && board.cells[i].isMarked === true){
   		num++;
@@ -99,5 +104,16 @@ function checkForWin() {
   } else {
   	return;
   }
+
+}
+
+function showAllMines () {
+  var mineField = document.getElementsByClassName('board')[0].children;
+    for (var i = 0; i<mineField.length; i++) {
+      if(mineField[i].classList.contains('hidden')) {
+        mineField[i].classList.remove('hidden');
+
+      }
+    }
 
 }
