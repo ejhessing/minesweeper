@@ -33,3 +33,12 @@ function getRow (elements) {
 		}
 	}
 }
+
+function getCol (elements) {
+	var classList = elements.classList;
+	for(var i = 0; i< classList.length; i++){
+		if(classList[i].charAt(0) === 'c'){
+			return Number(classList[i].charAt(classList[i].length-1));
+		}
+	}
+}
