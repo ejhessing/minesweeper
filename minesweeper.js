@@ -23,6 +23,7 @@ function showCell (evt) {
   if(evt.target.classList.contains('mine')){
     showAllMines();
     alert("Sorry you lost!");
+    reset();
   } else {
     showSurrounding(evt.target);
     evt.target.classList.remove('hidden');
@@ -110,11 +111,12 @@ function checkForWin () {
 	  	}
 	  }
 	  alert("You Have Won!");
+    reset();
     //if they have marked more than the required amount
   } else if (num > 5) {
     showAllMines();
     alert("Sorry you lost.  This Mine Field didn't have so many mines!");
-
+    reset();
   }
 }
 
@@ -129,4 +131,22 @@ function showAllMines () {
       mineField[i].classList.remove('marked');
     }
   }
+}
+
+//reset the game
+function reset () {
+  var mineField = document.getElementsByClassName('board')[0].children;
+  //reset hidden and marked classes and set html back to none
+  for (var i = 0; i<mineField.length; i++) {
+    mineField[i].classList.add('hidden');
+    mineField[i].classList.remove('marked');
+    mineField[i].innerHTML = '';
+
+  }
+  //clear the board
+  board = {
+    cells:[]
+  };
+  //recall startGame function.
+  startGame();
 }
