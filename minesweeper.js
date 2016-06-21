@@ -3,10 +3,9 @@ var board = {
 	cells:[]
 };
 
-
-
 function startGame () {
-var mineField = document.getElementsByClassName('board')[0].children;
+  var mineField = document.getElementsByClassName('board')[0].children;
+
   for(var i = 0; i < mineField.length; i++) {
     mineField[i].addEventListener('click',showCell);
     mineField[i].addEventListener('contextmenu',markCell);
@@ -20,19 +19,21 @@ var mineField = document.getElementsByClassName('board')[0].children;
 
 
 function showCell (evt) {
+  //check to see if clicked on a mine
   if(evt.target.classList.contains('mine')){
     showAllMines();
     alert("Sorry you lost!");
+  } else {
+    showSurrounding(evt.target);
+    evt.target.classList.remove('hidden');
+    checkForWin();
   }
-
-  showSurrounding(evt.target);
-  evt.target.classList.remove('hidden');
-  checkForWin();
 }
 
-
 function markCell (evt) {
+  //stops the right click button from opening up a menu
   evt.preventDefault();
+  //toggle marked and hidden classes
   evt.target.classList.toggle('marked');
   evt.target.classList.toggle('hidden');
 
@@ -45,6 +46,7 @@ function markCell (evt) {
   checkForWin();
 }
 
+//gets the row number
 function getRow (elements) {
 	var classList = elements.classList;
 	for(var i = 0; i< classList.length; i++){
@@ -54,6 +56,7 @@ function getRow (elements) {
 	}
 }
 
+//gets the column number
 function getCol (elements) {
 	var classList = elements.classList;
 	for(var i = 0; i< classList.length; i++){
@@ -63,6 +66,7 @@ function getCol (elements) {
 	}
 }
 
+//create the cell Object
 function addCellToBoard (elements) {
 	var newCell = {
 		row : getRow(elements),
@@ -74,8 +78,9 @@ function addCellToBoard (elements) {
 
 
 function countSurroundingMines (cell) {
-	var surroundingCells = getSurroundingCells(cell.row, cell.col);
-	var num = 0;
+	var surroundingCells = getSurroundingCells(cell.row, cell.col),
+	    num = 0;
+//check how many mines are around the cell we just clicked
 	for (var i = 0; i < surroundingCells.length; i++) {
 		if (surroundingCells[i].isMine) {
 			num++;
@@ -86,14 +91,18 @@ function countSurroundingMines (cell) {
 
 
 function checkForWin () {
-	var num = 0;
-var mineField = document.getElementsByClassName('board')[0].children;
-  for (var i = 0; i<board.cells.length; i++) {
-  	if(board.cells[i].isMine === true && board.cells[i].isMarked === true){
-  		num++;
-  	}
-  }
+  var num = 0,
+      mineField = document.getElementsByClassName('board')[0].children;
 
+  for (var i = 0; i<board.cells.length; i++) {
+    //if they clicked is Marked but not true, it still adds to the number
+  	if (board.cells[i].isMine === false && board.cells[i].isMarked === true) {
+  		num++;
+  	} else if (board.cells[i].isMine === true && board.cells[i].isMarked === true) {
+      num++;
+    }
+  }
+  //if 5 cells are marked then checks to see if the hidden class has been removed from all other cells
   if (num === 5) {
 	  for (var i = 0; i<mineField.length; i++) {
 	  	if (mineField[i].classList.contains('hidden')) {
@@ -101,19 +110,23 @@ var mineField = document.getElementsByClassName('board')[0].children;
 	  	}
 	  }
 	  alert("You Have Won!");
-  } else {
-  	return;
-  }
+    //if they have marked more than the required amount
+  } else if (num > 5) {
+    showAllMines();
+    alert("Sorry you lost.  This Mine Field didn't have so many mines!");
 
+  }
 }
 
+//if they lost, it will reveal where the mines were
 function showAllMines () {
   var mineField = document.getElementsByClassName('board')[0].children;
-    for (var i = 0; i<mineField.length; i++) {
-      if(mineField[i].classList.contains('hidden')) {
-        mineField[i].classList.remove('hidden');
 
-      }
+  for (var i = 0; i<mineField.length; i++) {
+    //checks if it contains the class hidden or if it contains the class marked, but it is not a mine then reveal it isn't
+    if (mineField[i].classList.contains('hidden') || mineField[i].classList.contains('marked') && board.cells[i].isMine === false) {
+      mineField[i].classList.remove('hidden');
+      mineField[i].classList.remove('marked');
     }
-
+  }
 }
