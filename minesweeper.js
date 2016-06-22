@@ -6,11 +6,13 @@ var board = {
 function startGame () {
   var mineField = document.getElementsByClassName('board')[0].children;
 
+  randomMine(5);
   for(var i = 0; i < mineField.length; i++) {
     mineField[i].addEventListener('click',showCell);
     mineField[i].addEventListener('contextmenu',markCell);
     addCellToBoard(mineField[i]);
   }
+
 
   for(var i = 0; i < board.cells.length; i++){
   	board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
@@ -140,6 +142,7 @@ function reset () {
   for (var i = 0; i<mineField.length; i++) {
     mineField[i].classList.add('hidden');
     mineField[i].classList.remove('marked');
+    mineField[i].classList.remove('mine');
     mineField[i].innerHTML = '';
 
   }
@@ -150,3 +153,18 @@ function reset () {
   //recall startGame function.
   startGame();
 }
+
+function randomMine (number) {
+  var mineField = document.getElementsByClassName('board')[0].children;
+
+  for(var k = 0; k<number; k++) {
+    var mine = Math.floor(Math.random()*25);
+    for (var i = 0; i<mineField.length; i++) {
+      if(i === mine){
+        mineField[i].classList.add('mine');
+      }
+    }
+  }
+}
+
+
